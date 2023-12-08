@@ -1,27 +1,22 @@
 import pygame
 import random
 
-# Initialisation de Pygame
 pygame.init()
 
 # Paramètres de la fenêtre
-screen_width = 800
-screen_height = 600
+screen_width, screen_height = 800, 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Blackjack")
 
-# Couleurs
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
+# Initialisation des polices
+font = pygame.font.SysFont(None, 48)
 
-# Charger les images des cartes (à remplacer par les chemins de vos images)
-# Exemple : card_images['A'] = pygame.image.load('chemin_vers_image_as.png')
-card_images = {}
+# Initialisation du deck de cartes
+valeurs_cartes = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+deck = valeurs_cartes * 4
 
-# Fonctions du jeu
 def tirer_carte(deck):
-    return deck.pop()
+    return deck.pop(random.randint(0, len(deck) - 1))
 
 def calculer_score(main):
     score = 0
@@ -38,34 +33,27 @@ def calculer_score(main):
     while score > 21 and as_count:
         score -= 10
         as_count -= 1
+    
     return score
 
-def dessiner_main(main, x, y):
-    for carte in main:
-        screen.blit(card_images[carte], (x, y))
-        x += 70  # Espacement entre les cartes
+# Initialisation des mains
+main_joueur = [tirer_carte(deck), tirer_carte(deck)]
+main_croupier = [tirer_carte(deck), tirer_carte(deck)]
 
-# Boucle principale du jeu
-def jeu_blackjack():
-    deck = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] * 4
-    random.shuffle(deck)
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-    main_joueur = [tirer_carte(deck), tirer_carte(deck)]
-    main_croupier = [tirer_carte(deck), tirer_carte(deck)]
+    screen.fill((0, 0, 0))
 
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+    # Afficher les mains et les scores
+    text_joueur = font.render("Joueur: " + ' '.join(main_joueur) + " Score: " + str(calculer_score(main_joueur)), True, (255, 255, 255))
+    text_croupier = font.render("Croupier: " + ' '.join(main_croupier) + " Score: " + str(calculer_score(main_croupier)), True, (255, 255, 255))
+    screen.blit(text_joueur, (50, screen_height - 50))
+    screen.blit(text_croupier, (50, 50))
 
-        screen.fill(GREEN)
+    pygame.display.flip()
 
-        # Afficher les mains
-        dessiner_main(main_joueur, 50, screen_height - 150)
-        dessiner_main(main_croupier, 50, 50)
-
-        pygame.display.flip()
-
-jeu_blackjack()
 pygame.quit()
