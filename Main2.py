@@ -1,6 +1,7 @@
 import pygame
 import random
 
+# Initialisation de Pygame
 pygame.init()
 
 # Paramètres de la fenêtre
@@ -17,11 +18,7 @@ WHITE = (255, 255, 255)
 GREEN = (0, 128, 0)
 RED = (255, 0, 0)
 
-# Initialisation du deck de cartes
-valeurs_cartes = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-deck = valeurs_cartes * 4
-random.shuffle(deck)
-
+# Fonctions du jeu
 def tirer_carte(deck):
     return deck.pop()
 
@@ -49,58 +46,72 @@ def dessiner_bouton(texte, x, y, largeur, hauteur, couleur):
     screen.blit(text, (x + (largeur - text.get_width()) / 2, y + (hauteur - text.get_height()) / 2))
     return pygame.Rect(x, y, largeur, hauteur)
 
-# Initialisation des mains
-main_joueur = [tirer_carte(deck), tirer_carte(deck)]
-main_croupier = [tirer_carte(deck), tirer_carte(deck)]
+def main():
+    # Initialisation du deck de cartes
+    valeurs_cartes = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+    deck = valeurs_cartes * 4
+    random.shuffle(deck)
 
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = event.pos
-            if oui_bouton.collidepoint(mouse_x, mouse_y):
-                main_joueur.append(tirer_carte(deck))
-            elif non_bouton.collidepoint(mouse_x, mouse_y):
-                running = False
+    # Initialisation des mains
+    main_joueur = [tirer_carte(deck), tirer_carte(deck)]
+    main_croupier = [tirer_carte(deck), tirer_carte(deck)]
 
-    screen.fill(GREEN)
+    # Boucle principale du jeu
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False  # Quitte la fonction main et revient à la boucle de jeu
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.pos
+                if oui_bouton.collidepoint(mouse_x, mouse_y):
+                    main_joueur.append(tirer_carte(deck))
+                elif non_bouton.collidepoint(mouse_x, mouse_y):
+                    running = False
 
-    # Afficher les mains et les scores
-    text_joueur = font.render("Joueur: " + ' '.join(main_joueur) + " Score: " + str(calculer_score(main_joueur)), True, WHITE)
-    text_croupier = font.render("Croupier: " + ' '.join(main_croupier) + " Score: " + str(calculer_score(main_croupier)), True, WHITE)
-    screen.blit(text_joueur, (50, screen_height - 100))
-    screen.blit(text_croupier, (50, 50))
+        screen.fill(GREEN)
 
-    # Dessiner les boutons
-    oui_bouton = dessiner_bouton("Oui", 100, screen_height - 150, 100, 50, RED)
-    non_bouton = dessiner_bouton("Non", 250, screen_height - 150, 100, 50, RED)
+        # Afficher les mains et les scores
+        text_joueur = font.render("Joueur: " + ' '.join(main_joueur) + " Score: " + str(calculer_score(main_joueur)), True, WHITE)
+        text_croupier = font.render("Croupier: " + ' '.join(main_croupier) + " Score: " + str(calculer_score(main_croupier)), True, WHITE)
+        screen.blit(text_joueur, (50, screen_height - 100))
+        screen.blit(text_croupier, (50, 50))
 
-    pygame.display.flip()
+        # Dessiner les boutons
+        oui_bouton = dessiner_bouton("Oui", 100, screen_height - 150, 100, 50, RED)
+        non_bouton = dessiner_bouton("Non", 250, screen_height - 150, 100, 50, RED)
 
-# Logique de fin de jeu
-score_joueur = calculer_score(main_joueur)
-score_croupier = calculer_score(main_croupier)
+        pygame.display.flip()
 
-while score_croupier < 17:
-    main_croupier.append(tirer_carte(deck))
+    # Logique de fin de jeu
+    score_joueur = calculer_score(main_joueur)
     score_croupier = calculer_score(main_croupier)
 
-# Déterminer le gagnant
-screen.fill((0, 0, 0))
-if score_joueur > 21:
-    resultat = "Vous avez dépassé 21. Vous perdez."
-elif score_croupier > 21 or score_joueur > score_croupier:
-    resultat = "Vous gagnez!"
-elif score_joueur < score_croupier:
-    resultat = "Vous perdez."
-else:
-    resultat = "Égalité."
+    while score_croupier < 17:
+        main_croupier.append(tirer_carte(deck))
+        score_croupier = calculer_score(main_croupier)
 
-text_resultat = font.render(resultat, True, (255, 255, 255))
-screen.blit(text_resultat, (screen_width / 2 - text_resultat.get_width() / 2, screen_height / 2 - text_resultat.get_height() / 2))
-pygame.display.flip()
+    # Déterminer le gagnant
+    screen.fill(BLACK)
+    if score_joueur > 21:
+        resultat = "Vous avez dépassé 21. Vous perdez."
+    elif score_croupier > 21 or score_joueur > score_croupier:
+        resultat = "Vous gagnez!"
+    elif score_joueur < score_croupier:
+        resultat = "Vous perdez."
+    else:
+        resultat = "Égalité."
 
-pygame.time.wait(5000)
+    text_resultat = font.render(resultat, True, WHITE)
+    screen.blit(text_resultat, (screen_width / 2 - text_resultat.get_width() / 2, screen_height / 2 - text_resultat.get_height() / 2))
+    pygame.display.flip()
+
+    pygame.time.wait(5000)
+    return True  # Le jeu peut recommencer
+
+# Boucle de jeu
+jeu_en_cours = True
+while jeu_en_cours:
+    jeu_en_cours = main()  # La fonction main renvoie False si le joueur choisit de quitter
+
 pygame.quit()
