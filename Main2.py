@@ -11,6 +11,12 @@ pygame.display.set_caption("Blackjack")
 # Initialisation des polices
 font = pygame.font.SysFont(None, 48)
 
+# Couleurs
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 128, 0)
+RED = (255, 0, 0)
+
 # Initialisation du deck de cartes
 valeurs_cartes = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 deck = valeurs_cartes * 4
@@ -37,6 +43,12 @@ def calculer_score(main):
     
     return score
 
+def dessiner_bouton(texte, x, y, largeur, hauteur, couleur):
+    pygame.draw.rect(screen, couleur, (x, y, largeur, hauteur))
+    text = font.render(texte, True, WHITE)
+    screen.blit(text, (x + (largeur - text.get_width()) / 2, y + (hauteur - text.get_height()) / 2))
+    return pygame.Rect(x, y, largeur, hauteur)
+
 # Initialisation des mains
 main_joueur = [tirer_carte(deck), tirer_carte(deck)]
 main_croupier = [tirer_carte(deck), tirer_carte(deck)]
@@ -46,19 +58,24 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_h:  # h pour "hit"
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = event.pos
+            if oui_bouton.collidepoint(mouse_x, mouse_y):
                 main_joueur.append(tirer_carte(deck))
-            elif event.key == pygame.K_s:  # s pour "stand"
+            elif non_bouton.collidepoint(mouse_x, mouse_y):
                 running = False
 
-    screen.fill((0, 0, 0))
+    screen.fill(GREEN)
 
     # Afficher les mains et les scores
-    text_joueur = font.render("Joueur: " + ' '.join(main_joueur) + " Score: " + str(calculer_score(main_joueur)), True, (255, 255, 255))
-    text_croupier = font.render("Croupier: " + ' '.join(main_croupier) + " Score: " + str(calculer_score(main_croupier)), True, (255, 255, 255))
-    screen.blit(text_joueur, (50, screen_height - 50))
+    text_joueur = font.render("Joueur: " + ' '.join(main_joueur) + " Score: " + str(calculer_score(main_joueur)), True, WHITE)
+    text_croupier = font.render("Croupier: " + ' '.join(main_croupier) + " Score: " + str(calculer_score(main_croupier)), True, WHITE)
+    screen.blit(text_joueur, (50, screen_height - 100))
     screen.blit(text_croupier, (50, 50))
+
+    # Dessiner les boutons
+    oui_bouton = dessiner_bouton("Oui", 100, screen_height - 150, 100, 50, RED)
+    non_bouton = dessiner_bouton("Non", 250, screen_height - 150, 100, 50, RED)
 
     pygame.display.flip()
 
