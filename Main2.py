@@ -14,9 +14,10 @@ font = pygame.font.SysFont(None, 48)
 # Initialisation du deck de cartes
 valeurs_cartes = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 deck = valeurs_cartes * 4
+random.shuffle(deck)
 
 def tirer_carte(deck):
-    return deck.pop(random.randint(0, len(deck) - 1))
+    return deck.pop()
 
 def calculer_score(main):
     score = 0
@@ -45,6 +46,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_h:  # h pour "hit"
+                main_joueur.append(tirer_carte(deck))
+            elif event.key == pygame.K_s:  # s pour "stand"
+                running = False
 
     screen.fill((0, 0, 0))
 
@@ -56,4 +62,28 @@ while running:
 
     pygame.display.flip()
 
+# Logique de fin de jeu
+score_joueur = calculer_score(main_joueur)
+score_croupier = calculer_score(main_croupier)
+
+while score_croupier < 17:
+    main_croupier.append(tirer_carte(deck))
+    score_croupier = calculer_score(main_croupier)
+
+# Déterminer le gagnant
+screen.fill((0, 0, 0))
+if score_joueur > 21:
+    resultat = "Vous avez dépassé 21. Vous perdez."
+elif score_croupier > 21 or score_joueur > score_croupier:
+    resultat = "Vous gagnez!"
+elif score_joueur < score_croupier:
+    resultat = "Vous perdez."
+else:
+    resultat = "Égalité."
+
+text_resultat = font.render(resultat, True, (255, 255, 255))
+screen.blit(text_resultat, (screen_width / 2 - text_resultat.get_width() / 2, screen_height / 2 - text_resultat.get_height() / 2))
+pygame.display.flip()
+
+pygame.time.wait(5000)
 pygame.quit()
