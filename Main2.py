@@ -75,7 +75,7 @@ def main():
         # Afficher les mains et les scores
         text_joueur = font.render("Joueur: " + ' + '.join(main_joueur) + " = " + str(calculer_score(main_joueur)), True, BLACK)
         text_croupier = font.render("Croupier: " + ' + '.join(main_croupier) + " = " + str(calculer_score(main_croupier)), True, WHITE)
-        screen.blit(text_joueur, (50, screen_height - 100))
+        screen.blit(text_joueur, (50, screen_height - 500))
         screen.blit(text_croupier, (50, 50))
 
         # Dessiner les boutons
