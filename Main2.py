@@ -10,13 +10,14 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Blackjack")
 
 # Initialisation des polices
-font = pygame.font.SysFont(None, 48)
+font = pygame.font.SysFont(None, 60)
 
 # Couleurs
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-GREEN = (0, 128, 0)
-RED = (255, 0, 0)
+GREEN = (48,128,20)
+RED = (205,0,0)
+GOLD = (255, 193, 37)
 
 # Fonctions du jeu
 def tirer_carte(deck):
@@ -72,14 +73,14 @@ def main():
         screen.fill(GREEN)
 
         # Afficher les mains et les scores
-        text_joueur = font.render("Joueur: " + ' '.join(main_joueur) + " Score: " + str(calculer_score(main_joueur)), True, WHITE)
-        text_croupier = font.render("Croupier: " + ' '.join(main_croupier) + " Score: " + str(calculer_score(main_croupier)), True, WHITE)
+        text_joueur = font.render("Joueur: " + ' + '.join(main_joueur) + " = " + str(calculer_score(main_joueur)), True, BLACK)
+        text_croupier = font.render("Croupier: " + ' + '.join(main_croupier) + " = " + str(calculer_score(main_croupier)), True, WHITE)
         screen.blit(text_joueur, (50, screen_height - 100))
         screen.blit(text_croupier, (50, 50))
 
         # Dessiner les boutons
-        oui_bouton = dessiner_bouton("Oui", 100, screen_height - 150, 100, 50, RED)
-        non_bouton = dessiner_bouton("Non", 250, screen_height - 150, 100, 50, RED)
+        oui_bouton = dessiner_bouton("Oui", 450, screen_height - 150, 100, 50, RED)
+        non_bouton = dessiner_bouton("Non", 600, screen_height - 150, 100, 50, RED)
 
         pygame.display.flip()
 
