@@ -47,6 +47,7 @@ def dessiner_bouton(texte, x, y, largeur, hauteur, couleur):
     screen.blit(text, (x + (largeur - text.get_width()) / 2, y + (hauteur - text.get_height()) / 2))
     return pygame.Rect(x, y, largeur, hauteur)
 
+
 def main():
     # Initialisation du deck de cartes
     valeurs_cartes = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -64,11 +65,15 @@ def main():
             if event.type == pygame.QUIT:
                 return False  # Quitte la fonction main et revient à la boucle de jeu
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = event.pos
-                if oui_bouton.collidepoint(mouse_x, mouse_y):
-                    main_joueur.append(tirer_carte(deck))
-                elif non_bouton.collidepoint(mouse_x, mouse_y):
-                    running = False
+                try:
+                    mouse_x, mouse_y = event.pos
+                    if oui_bouton.collidepoint(mouse_x, mouse_y):
+                        main_joueur.append(tirer_carte(deck))
+                    elif non_bouton.collidepoint(mouse_x, mouse_y):
+                        running = False
+                except :
+                    print(running)
+
 
         screen.fill(GREEN)
 
