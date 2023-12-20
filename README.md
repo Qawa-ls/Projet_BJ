@@ -16,32 +16,32 @@ Les valeurs ont bien été respecter, surtout pour l'AS, il s'adapte automatique
 Le calcul des cartes se fait automatiquement et est directement affiché sur l'écran.
 Les cartes se tirent joueur par joueur, tant que les joueurs demande de nouvelle carte il continue de piocher jusqu'à ce que l'on clique sur "non".
 
-# Fonctionnalités #
+# Fonctionnalités 
 
 Jeu de Blackjack multijoueur en local
 Interaction avec l'utilisateur via une interface graphique
 Gestion des tours de jeu pour plusieurs joueurs
 Affichage des scores et des résultats en temps réel
 
-# Dépendances #
+# Dépendances 
 
 Pour exécuter ce jeu, vous aurez besoin de Python et de Pygame installés sur votre machine.
 Python (3.12 recommandé)
 Pygame
 
-# Installation #
+# Installation 
 
 Pour installer Pygame, exécutez la commande suivante dans votre terminal:
 pip install pygame
 
 
-# Utilisation #
+# Utilisation 
 
 Pour démarrer le jeu, exécutez le fichier main.py avec Python depuis votre terminal:
 python main.py
 
 
-# Contrôles du jeu #
+# Contrôles du jeu 
 
 Utilisez la souris pour interagir avec les boutons à l'écran.
 Cliquez sur "Tirer" pour obtenir une nouvelle carte.
