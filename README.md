@@ -46,3 +46,8 @@ python main.py
 Utilisez la souris pour interagir avec les boutons à l'écran.
 Cliquez sur "Tirer" pour obtenir une nouvelle carte.
 Cliquez sur "Rester" pour terminer votre tour.
+
+
+RÉ Guillaume
+CAPOLUNGHI Hugo
+LOUBEYRE Thibault
